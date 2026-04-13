@@ -290,7 +290,7 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
         </Text>
       </group>
 
-      {/* —— Zen Forge —— */}
+      {/* —— Zen Clock —— */}
       <group
         position={[4.8, 1.8, 4.2]}
         onClick={(e) => {
@@ -300,28 +300,56 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
         {...bindInteractive}
       >
         <mesh ref={zenForgeRef} castShadow>
-          <dodecahedronGeometry args={[0.65, 0]} />
+          <cylinderGeometry args={[0.8, 0.8, 0.2, 32]} />
           <meshStandardMaterial
-            color="#065f46"
-            metalness={0.3}
-            roughness={0.2}
-            transmission={0.8}
-            thickness={0.5}
-            transparent
-            opacity={0.7}
-            envMapIntensity={1.2}
+            color="#8b5cf6"
+            metalness={0.7}
+            roughness={0.1}
+            emissive="#6d28d9"
+            emissiveIntensity={0.4}
           />
         </mesh>
-        <pointLight position={[0, 0, 0]} intensity={0.5} distance={3.5} color="#34d399" />
+        
+        {/* Clock face */}
+        <mesh position={[0, 0.11, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.75, 0.6, 0.05, 32]} />
+          <meshStandardMaterial
+            color="#f3f4f6"
+            metalness={0.8}
+            roughness={0.2}
+          />
+        </mesh>
+        
+        {/* Clock hands */}
+        <mesh position={[0, 0.11, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <boxGeometry args={[0.05, 0.5, 0.02]} />
+          <meshStandardMaterial color="#1f2937" />
+        </mesh>
+        <mesh position={[0, 0.11, 0]} rotation={[Math.PI / 2, 0, Math.PI / 6]}>
+          <boxGeometry args={[0.03, 0.35, 0.02]} />
+          <meshStandardMaterial color="#ef4444" />
+        </mesh>
+        
+        {/* Center dot */}
+        <mesh position={[0, 0.11, 0]}>
+          <sphereGeometry args={[0.05, 16, 16]} />
+          <meshStandardMaterial
+            color="#fbbf24"
+            emissive="#f59e0b"
+            emissiveIntensity={0.6}
+          />
+        </mesh>
+        
+        <pointLight position={[0, 0, 0]} intensity={0.7} distance={5} color="#8b5cf6" />
         <Text
           position={[0, 1.2, 0]}
           fontSize={0.16}
-          color="#d1fae5"
+          color="#e9d5ff"
           anchorX="center"
           anchorY="middle"
           letterSpacing={0.06}
         >
-          ZEN FORGE
+          ZEN CLOCK
         </Text>
       </group>
 
