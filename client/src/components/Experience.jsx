@@ -9,7 +9,7 @@ import {
 
 /**
  * @param {{
- *   setActiveModule: (m: 'tasks' | 'ai' | 'music') => void;
+ *   setActiveModule: (m: 'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'nexus') => void;
  *   setPointerInteractiveHover: (v: boolean) => void;
  * }} props
  */
@@ -17,17 +17,21 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
   const monolithRef = useRef(null);
   const oracleGroupRef = useRef(null);
   const deskGroupRef = useRef(null);
+  const careerRadarRef = useRef(null);
+  const curriculumMonolithRef = useRef(null);
+  const zenForgeRef = useRef(null);
+  const nexusPortalRef = useRef(null);
 
   const bindInteractive = {
     onPointerOver: (e) => {
       e.stopPropagation();
       setPointerInteractiveHover(true);
-      document.body.style.cursor = 'none';
+      document.body.style.cursor = 'pointer';
     },
     onPointerOut: (e) => {
       e.stopPropagation();
       setPointerInteractiveHover(false);
-      document.body.style.cursor = 'none';
+      document.body.style.cursor = 'default';
     },
   };
 
@@ -43,6 +47,22 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
     }
     if (deskGroupRef.current) {
       deskGroupRef.current.rotation.y = Math.sin(t * 0.22) * 0.045;
+    }
+    if (careerRadarRef.current) {
+      careerRadarRef.current.rotation.y += delta * 0.25;
+      careerRadarRef.current.rotation.z = Math.sin(t * 0.3) * 0.1;
+    }
+    if (curriculumMonolithRef.current) {
+      curriculumMonolithRef.current.rotation.y += delta * 0.15;
+    }
+    if (zenForgeRef.current) {
+      zenForgeRef.current.rotation.x += delta * 0.2;
+      zenForgeRef.current.rotation.y += delta * 0.15;
+      zenForgeRef.current.position.y = 1.8 + Math.sin(t * 0.8) * 0.1;
+    }
+    if (nexusPortalRef.current) {
+      nexusPortalRef.current.rotation.x += delta * 0.3;
+      nexusPortalRef.current.rotation.z += delta * 0.2;
     }
   });
 
@@ -202,6 +222,138 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
           letterSpacing={0.08}
         >
           AUDIO CORE
+        </Text>
+      </group>
+
+      {/* —— Career Radar —— */}
+      <group
+        position={[6.5, 2.2, -3.8]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveModule('career');
+        }}
+        {...bindInteractive}
+      >
+        <mesh ref={careerRadarRef} castShadow>
+          <sphereGeometry args={[0.85, 24, 24]} />
+          <meshStandardMaterial
+            color="#10b981"
+            emissive="#064e3b"
+            emissiveIntensity={0.4}
+            wireframe
+            transparent
+            opacity={0.8}
+          />
+        </mesh>
+        <pointLight position={[0, 0, 0]} intensity={0.6} distance={4} color="#10b981" />
+        <Text
+          position={[0, 1.3, 0]}
+          fontSize={0.16}
+          color="#d1fae5"
+          anchorX="center"
+          anchorY="middle"
+          letterSpacing={0.06}
+        >
+          CAREER RADAR
+        </Text>
+      </group>
+
+      {/* —— Curriculum Monolith —— */}
+      <group
+        position={[-7.2, 1.8, -2.5]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveModule('curriculum');
+        }}
+        {...bindInteractive}
+      >
+        <mesh ref={curriculumMonolithRef} castShadow>
+          <boxGeometry args={[0.8, 3.6, 0.8]} />
+          <meshStandardMaterial
+            color="#1e293b"
+            metalness={0.9}
+            roughness={0.1}
+            emissive="#0f172a"
+            emissiveIntensity={0.2}
+          />
+        </mesh>
+        <pointLight position={[0, 1.8, 0]} intensity={0.4} distance={3} color="#6366f1" />
+        <Text
+          position={[0, 2.2, 0]}
+          fontSize={0.15}
+          color="#e0e7ff"
+          anchorX="center"
+          anchorY="middle"
+          letterSpacing={0.06}
+        >
+          CURRICULUM
+        </Text>
+      </group>
+
+      {/* —— Zen Forge —— */}
+      <group
+        position={[4.8, 1.8, 4.2]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveModule('zen');
+        }}
+        {...bindInteractive}
+      >
+        <mesh ref={zenForgeRef} castShadow>
+          <dodecahedronGeometry args={[0.65, 0]} />
+          <meshStandardMaterial
+            color="#065f46"
+            metalness={0.3}
+            roughness={0.2}
+            transmission={0.8}
+            thickness={0.5}
+            transparent
+            opacity={0.7}
+            envMapIntensity={1.2}
+          />
+        </mesh>
+        <pointLight position={[0, 0, 0]} intensity={0.5} distance={3.5} color="#34d399" />
+        <Text
+          position={[0, 1.2, 0]}
+          fontSize={0.16}
+          color="#d1fae5"
+          anchorX="center"
+          anchorY="middle"
+          letterSpacing={0.06}
+        >
+          ZEN FORGE
+        </Text>
+      </group>
+
+      {/* —— Nexus Portal —— */}
+      <group
+        position={[-5.5, 2.0, 3.8]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveModule('nexus');
+        }}
+        {...bindInteractive}
+      >
+        <mesh ref={nexusPortalRef} castShadow>
+          <torusGeometry args={[0.8, 0.25, 16, 32]} />
+          <meshStandardMaterial
+            color="#f59e0b"
+            emissive="#92400e"
+            emissiveIntensity={0.6}
+            metalness={0.7}
+            roughness={0.3}
+          />
+        </mesh>
+        <pointLight position={[0, 0, 0]} intensity={0.8} distance={5} color="#f59e0b" />
+        <Text
+          position={[0, 1.3, 0]}
+          fontSize={0.16}
+          color="#fef3c7"
+          anchorX="center"
+          anchorY="middle"
+          letterSpacing={0.06}
+        >
+          NEXUS PORTAL
         </Text>
       </group>
 

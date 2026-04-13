@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import Lenis from '@studio-freight/react-lenis';
@@ -13,6 +13,19 @@ import { useAtlasStore } from './store/useAtlasStore';
 function FloatingNav() {
   const setActiveModule = useAtlasStore((s) => s.setActiveModule);
   const setUiHover = useAtlasStore((s) => s.setUiHover);
+  const activeModule = useAtlasStore((s) => s.activeModule);
+
+  // Disable Lenis when sidebar is open
+  useEffect(() => {
+    const lenis = document.querySelector('[data-lenis-prevent]');
+    if (lenis) {
+      if (activeModule && activeModule !== 'tasks') {
+        lenis.setAttribute('data-lenis-prevent', 'true');
+      } else {
+        lenis.removeAttribute('data-lenis-prevent');
+      }
+    }
+  }, [activeModule]);
 
   const btn =
     'rounded-full border border-white/[0.14] bg-[rgba(2,6,23,0.55)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-200 shadow-lg backdrop-blur-xl transition hover:border-cyan-400/35 hover:text-cyan-100';
@@ -23,6 +36,10 @@ function FloatingNav() {
         { id: 'tasks', label: 'Desk' },
         { id: 'ai', label: 'AI' },
         { id: 'music', label: 'Audio' },
+        { id: 'career', label: 'Career' },
+        { id: 'curriculum', label: 'Curriculum' },
+        { id: 'zen', label: 'Zen' },
+        { id: 'nexus', label: 'Nexus' },
       ].map(({ id, label }) => (
         <button
           key={id}
@@ -52,10 +69,12 @@ export default function App() {
         wheelMultiplier: 0.88,
         touchMultiplier: 1.15,
         lerp: 0.085,
+        normalizeWheel: true,
+        syncTouch: true,
       }}
       autoRaf
     >
-      <div className="relative min-h-[220vh] bg-[#020617] text-slate-100 antialiased">
+      <div className="relative h-screen bg-[#020617] text-slate-100 antialiased overflow-hidden">
         <div className="fixed inset-0 z-0">
           <Canvas
             shadows
@@ -83,9 +102,8 @@ export default function App() {
 
         <HeroUI />
         <FloatingNav />
-        <ScrollSection />
 
-        <CustomCursor />
+        {/* <CustomCursor /> */}
         <GlassTaskDrawer />
         <ModuleDrawer />
       </div>

@@ -1,17 +1,46 @@
+import { useEffect } from 'react';
 import { useAtlasStore } from '../../store/useAtlasStore';
 import AIOraclePanel from './AIOraclePanel';
 import MusicCorePanel from './MusicCorePanel';
+import CareerPanel from './CareerPanel';
+import CurriculumPanel from './CurriculumPanel';
+import ZenPanel from './ZenPanel';
+import NexusPanel from './NexusPanel';
 import { X } from 'lucide-react';
 
 const titles = {
   ai: 'Neural channel',
   music: 'Sonic field',
+  career: 'Career opportunities',
+  curriculum: 'Learning path',
+  zen: 'Focus sanctuary',
+  nexus: 'Collaboration hub',
 };
 
 export default function ModuleDrawer() {
   const activeModule = useAtlasStore((s) => s.activeModule);
   const closeModule = useAtlasStore((s) => s.closeModule);
   const setUiHover = useAtlasStore((s) => s.setUiHover);
+
+  // Simple wheel event handling with increased sensitivity
+  useEffect(() => {
+    const sidebarContent = document.querySelector('.sidebar-content');
+    if (!sidebarContent) return;
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      // Increased sensitivity multiplier
+      const sensitivity = 2.0;
+      sidebarContent.scrollTop += e.deltaY * sensitivity;
+    };
+
+    sidebarContent.addEventListener('wheel', handleWheel, { passive: false });
+    
+    return () => {
+      sidebarContent.removeEventListener('wheel', handleWheel);
+    };
+  }, [activeModule]);
 
   if (!activeModule || activeModule === 'tasks') return null;
 
@@ -44,9 +73,13 @@ export default function ModuleDrawer() {
             <X className="h-5 w-5" strokeWidth={1.5} />
           </button>
         </header>
-        <div className="min-h-0 flex-1 overflow-hidden px-6 py-5">
+        <div className="sidebar-content min-h-0 flex-1 overflow-y-scroll overflow-x-hidden px-6 py-5" style={{ scrollBehavior: 'smooth' }}>
           {activeModule === 'ai' && <AIOraclePanel />}
           {activeModule === 'music' && <MusicCorePanel />}
+          {activeModule === 'career' && <CareerPanel />}
+          {activeModule === 'curriculum' && <CurriculumPanel />}
+          {activeModule === 'zen' && <ZenPanel />}
+          {activeModule === 'nexus' && <NexusPanel />}
         </div>
       </aside>
     </>

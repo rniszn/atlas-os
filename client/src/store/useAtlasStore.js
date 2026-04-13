@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /**
- * @typedef {'tasks' | 'ai' | 'music' | null} ActiveModule
+ * @typedef {'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'nexus' | null} ActiveModule
  */
 
 export const useAtlasStore = create((set) => ({
