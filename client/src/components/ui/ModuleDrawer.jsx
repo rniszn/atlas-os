@@ -6,6 +6,7 @@ import CareerPanel from './CareerPanel';
 import CurriculumPanel from './CurriculumPanel';
 import ZenPanel from './ZenPanel';
 import NexusPanel from './NexusPanel';
+import TrackerDrawer from '../TrackerDrawer';
 import { X } from 'lucide-react';
 
 const titles = {
@@ -15,6 +16,7 @@ const titles = {
   curriculum: 'Learning path',
   zen: 'Focus sanctuary',
   nexus: 'Collaboration hub',
+  tracker: 'Chronos Time Tracker',
 };
 
 export default function ModuleDrawer() {
@@ -43,6 +45,11 @@ export default function ModuleDrawer() {
   }, [activeModule]);
 
   if (!activeModule || activeModule === 'tasks') return null;
+
+  // Special handling for tracker - use its own drawer
+  if (activeModule === 'tracker') {
+    return <TrackerDrawer />;
+  }
 
   return (
     <>

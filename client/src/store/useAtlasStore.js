@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /**
- * @typedef {'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'nexus' | null} ActiveModule
+ * @typedef {'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'nexus' | 'tracker' | null} ActiveModule
  */
 
 export const useAtlasStore = create((set) => ({
@@ -18,4 +18,19 @@ export const useAtlasStore = create((set) => ({
   /** True when hovering 2D controls (desk / oracle / audio pills). */
   uiHover: false,
   setUiHover: (v) => set({ uiHover: Boolean(v) }),
+
+  /** Time Tracker State */
+  totalFocusTime: 0,
+  incrementFocusTime: () => set((state) => ({ totalFocusTime: state.totalFocusTime + 1 })),
+  resetFocusTime: () => set({ totalFocusTime: 0 }),
+
+  focusLogs: [],
+  addFocusLog: (log) => set((state) => ({ focusLogs: [log, ...state.focusLogs] })),
+  clearFocusLogs: () => set({ focusLogs: [] }),
+
+  isActive: true,
+  setIsActive: (active) => set({ isActive: active }),
+
+  sessionStartTime: null,
+  setSessionStartTime: (time) => set({ sessionStartTime: time }),
 }));

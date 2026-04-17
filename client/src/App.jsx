@@ -9,6 +9,7 @@ import CustomCursor from './components/CustomCursor';
 import GlassTaskDrawer from './components/GlassTaskDrawer';
 import ModuleDrawer from './components/ui/ModuleDrawer';
 import { useAtlasStore } from './store/useAtlasStore';
+import { useTimeTracker } from './hooks/useTimeTracker';
 
 function FloatingNav() {
   const setActiveModule = useAtlasStore((s) => s.setActiveModule);
@@ -61,6 +62,9 @@ export default function App() {
   const setActiveModule = useAtlasStore((s) => s.setActiveModule);
   const setPointerInteractiveHover = useAtlasStore((s) => s.setPointerInteractiveHover);
 
+  // Initialize time tracker
+  useTimeTracker();
+
   return (
     <Lenis
       root
@@ -107,6 +111,6 @@ export default function App() {
         <GlassTaskDrawer />
         <ModuleDrawer />
       </div>
-    </Lenis>
+      </Lenis>
   );
 }

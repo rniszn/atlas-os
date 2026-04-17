@@ -5,7 +5,7 @@ function isValidObjectId(id) {
   return mongoose.Types.ObjectId.isValid(id);
 }
 
-export async function listTasks(_req, res) {
+export async function listTasks(req, res) {
   try {
     const tasks = await Task.find().sort({ updatedAt: -1 }).lean();
     return res.status(200).json(tasks);
@@ -109,10 +109,11 @@ export async function updateTask(req, res) {
       return res.status(400).json({ error: 'No valid fields to update' });
     }
 
-    const task = await Task.findByIdAndUpdate(id, patch, {
-      new: true,
-      runValidators: true,
-    });
+    const task = await Task.findByIdAndUpdate(
+      id, 
+      patch, 
+      { new: true, runValidators: true }
+    );
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }

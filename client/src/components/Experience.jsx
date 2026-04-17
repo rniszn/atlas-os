@@ -9,7 +9,7 @@ import {
 
 /**
  * @param {{
- *   setActiveModule: (m: 'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'nexus') => void;
+ *   setActiveModule: (m: 'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'nexus' | 'tracker') => void;
  *   setPointerInteractiveHover: (v: boolean) => void;
  * }} props
  */
@@ -21,6 +21,7 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
   const curriculumMonolithRef = useRef(null);
   const zenForgeRef = useRef(null);
   const nexusPortalRef = useRef(null);
+  const chronosCoreRef = useRef(null);
 
   const bindInteractive = {
     onPointerOver: (e) => {
@@ -63,6 +64,11 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
     if (nexusPortalRef.current) {
       nexusPortalRef.current.rotation.x += delta * 0.3;
       nexusPortalRef.current.rotation.z += delta * 0.2;
+    }
+    if (chronosCoreRef.current) {
+      chronosCoreRef.current.rotation.y += delta * 0.5;
+      chronosCoreRef.current.rotation.x = Math.sin(t * 0.8) * 0.1;
+      chronosCoreRef.current.position.y = 2.5 + Math.sin(t * 0.6) * 0.15;
     }
   });
 
@@ -382,6 +388,46 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
           letterSpacing={0.06}
         >
           NEXUS PORTAL
+        </Text>
+      </group>
+
+      {/* —— Chronos Core —— */}
+      <group
+        position={[0, 2.5, 0]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveModule('tracker');
+        }}
+        {...bindInteractive}
+      >
+        <mesh ref={chronosCoreRef} castShadow>
+          <icosahedronGeometry args={[0.65, 0]} />
+          <meshPhysicalMaterial
+            color="#06b6d4"
+            metalness={0.3}
+            roughness={0.1}
+            transmission={0.8}
+            thickness={0.5}
+            ior={1.5}
+            emissive="#0891b2"
+            emissiveIntensity={0.4}
+            wireframe
+          />
+        </mesh>
+        <mesh scale={1.15}>
+          <icosahedronGeometry args={[0.65, 1]} />
+          <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.3} />
+        </mesh>
+        <pointLight position={[0, 0, 0]} intensity={0.5} distance={4} color="#06b6d4" />
+        <Text
+          position={[0, 1.1, 0]}
+          fontSize={0.16}
+          color="#a5f3fc"
+          anchorX="center"
+          anchorY="middle"
+          letterSpacing={0.06}
+        >
+          CHRONOS CORE
         </Text>
       </group>
 
