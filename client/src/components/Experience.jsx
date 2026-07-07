@@ -9,7 +9,7 @@ import {
 
 /**
  * @param {{
- *   setActiveModule: (m: 'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'nexus' | 'tracker') => void;
+ *   setActiveModule: (m: 'tasks' | 'ai' | 'music' | 'career' | 'curriculum' | 'zen' | 'tracker') => void;
  *   setPointerInteractiveHover: (v: boolean) => void;
  * }} props
  */
@@ -20,7 +20,6 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
   const careerRadarRef = useRef(null);
   const curriculumMonolithRef = useRef(null);
   const zenForgeRef = useRef(null);
-  const nexusPortalRef = useRef(null);
   const chronosCoreRef = useRef(null);
 
   const bindInteractive = {
@@ -60,10 +59,6 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
       zenForgeRef.current.rotation.x += delta * 0.2;
       zenForgeRef.current.rotation.y += delta * 0.15;
       zenForgeRef.current.position.y = 1.8 + Math.sin(t * 0.8) * 0.1;
-    }
-    if (nexusPortalRef.current) {
-      nexusPortalRef.current.rotation.x += delta * 0.3;
-      nexusPortalRef.current.rotation.z += delta * 0.2;
     }
     if (chronosCoreRef.current) {
       chronosCoreRef.current.rotation.y += delta * 0.5;
@@ -356,38 +351,6 @@ export default function Experience({ setActiveModule, setPointerInteractiveHover
           letterSpacing={0.06}
         >
           ZEN CLOCK
-        </Text>
-      </group>
-
-      {/* —— Nexus Portal —— */}
-      <group
-        position={[-5.5, 2.0, 3.8]}
-        onClick={(e) => {
-          e.stopPropagation();
-          setActiveModule('nexus');
-        }}
-        {...bindInteractive}
-      >
-        <mesh ref={nexusPortalRef} castShadow>
-          <torusGeometry args={[0.8, 0.25, 16, 32]} />
-          <meshStandardMaterial
-            color="#f59e0b"
-            emissive="#92400e"
-            emissiveIntensity={0.6}
-            metalness={0.7}
-            roughness={0.3}
-          />
-        </mesh>
-        <pointLight position={[0, 0, 0]} intensity={0.8} distance={5} color="#f59e0b" />
-        <Text
-          position={[0, 1.3, 0]}
-          fontSize={0.16}
-          color="#fef3c7"
-          anchorX="center"
-          anchorY="middle"
-          letterSpacing={0.06}
-        >
-          NEXUS PORTAL
         </Text>
       </group>
 

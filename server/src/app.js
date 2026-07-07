@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import taskRoutes from './routes/taskRoutes.js';
+import jobRoutes from './routes/jobRoutes.js';
+import trackRoutes from './routes/trackRoutes.js';
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/tasks', taskRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/tracks', trackRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found', path: req.path });

@@ -40,7 +40,6 @@ function FloatingNav() {
         { id: 'career', label: 'Career' },
         { id: 'curriculum', label: 'Curriculum' },
         { id: 'zen', label: 'Zen' },
-        { id: 'nexus', label: 'Nexus' },
       ].map(({ id, label }) => (
         <button
           key={id}
@@ -61,9 +60,13 @@ function FloatingNav() {
 export default function App() {
   const setActiveModule = useAtlasStore((s) => s.setActiveModule);
   const setPointerInteractiveHover = useAtlasStore((s) => s.setPointerInteractiveHover);
+  const activeModule = useAtlasStore((s) => s.activeModule);
 
   // Initialize time tracker
   useTimeTracker();
+
+  // Disable OrbitControls when any drawer is open
+  const orbitControlsEnabled = !activeModule || activeModule === 'tasks';
 
   return (
     <Lenis
@@ -79,12 +82,12 @@ export default function App() {
       autoRaf
     >
       <div className="relative h-screen bg-[#020617] text-slate-100 antialiased overflow-hidden">
-        <div className="fixed inset-0 z-0">
+        <div className="fixed inset-0 z-0 pointer-events-none">
           <Canvas
             shadows
             dpr={[1, 2]}
             camera={{ position: [6.8, 3.9, 8.4], fov: 40 }}
-            className="h-full w-full touch-none"
+            className="h-full w-full touch-none pointer-events-auto"
             gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
           >
             <Suspense fallback={null}>
@@ -93,6 +96,7 @@ export default function App() {
                 setPointerInteractiveHover={setPointerInteractiveHover}
               />
               <OrbitControls
+                enabled={orbitControlsEnabled}
                 enablePan
                 enableZoom
                 minPolarAngle={0.2}

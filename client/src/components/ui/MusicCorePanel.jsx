@@ -1,174 +1,88 @@
-import { useMemo, useState } from 'react';
-
-/**
- * Spotify only loads in iframes when the path is /embed/playlist|album|track|episode/ID.
- */
-function normalizeSpotifyEmbedSrc(raw) {
-  if (!raw || typeof raw !== 'string') return null;
-  const s = raw.trim();
-  if (!s) return null;
-
-  if (s.includes('open.spotify.com/embed/')) {
-    try {
-      const u = new URL(s);
-      if (!u.hostname.endsWith('open.spotify.com')) return s;
-      return u.toString();
-    } catch {
-      return s;
-    }
+const CURATED_TRACKS = [
+  {
+    id: "_4kHxtiuML0",
+    title: "Focus Music for Work and Studying, Background Music for Concentration, Study Music",
+    category: "Focus",
+    url: "https://www.youtube.com/watch?v=_4kHxtiuML0"
+  },
+  {
+    id: "oPVte6aMprI",
+    title: "Deep Focus - Music For Studying, Concentration and Work",
+    category: "Deep Focus",
+    url: "https://www.youtube.com/watch?v=oPVte6aMprI"
+  },
+  {
+    id: "lkkGlVWvkLk",
+    title: "Intense Study - 40Hz Gamma Binaural Beats to Increase Productivity and Focus",
+    category: "Binaural Beats",
+    url: "https://www.youtube.com/watch?v=lkkGlVWvkLk"
+  },
+  {
+    id: "WHqbqzqeskw",
+    title: "You Are Solving The Impossible | Interstellar Soundtrack",
+    category: "Cinematic",
+    url: "https://www.youtube.com/watch?v=WHqbqzqeskw"
   }
-
-  const patterns = [
-    [/open\.spotify\.com\/playlist\/([a-zA-Z0-9]+)/, 'playlist'],
-    [/open\.spotify\.com\/album\/([a-zA-Z0-9]+)/, 'album'],
-    [/open\.spotify\.com\/track\/([a-zA-Z0-9]+)/, 'track'],
-    [/open\.spotify\.com\/episode\/([a-zA-Z0-9]+)/, 'episode'],
-  ];
-
-  for (const [re, kind] of patterns) {
-    const m = s.match(re);
-    if (m) {
-      return `https://open.spotify.com/embed/${kind}/${m[1]}`;
-    }
-  }
-
-  return s;
-}
-
-function youtubeEmbedUrl(input) {
-  if (!input || typeof input !== 'string') return null;
-  const s = input.trim();
-  if (!s) return null;
-  // Already embed
-  if (s.includes('youtube.com/embed/') || s.includes('youtube-nocookie.com/embed/')) {
-    try {
-      return new URL(s).toString();
-    } catch {
-      return s;
-    }
-  }
-  // youtu.be/VIDEO
-  const short = s.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
-  if (short) return `https://www.youtube.com/embed/${short[1]}`;
-  // watch?v=
-  const watch = s.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
-  if (watch) return `https://www.youtube.com/embed/${watch[1]}`;
-  return null;
-}
-
-/** Spotify editorial — may still 404 in embed for some accounts/regions. */
-const SPOTIFY_FALLBACK_EMBED =
-  'https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LpO';
-
-/**
- * Lofi stream — works in most browsers without Spotify login.
- * Override with VITE_YOUTUBE_FOCUS_URL (watch URL or embed URL).
- */
-const YOUTUBE_DEFAULT = 'https://www.youtube.com/embed/jfKfPfyJRdk';
+];
 
 export default function MusicCorePanel() {
-  const [source, setSource] = useState('youtube');
-
-  const fromEnvSpotify =
-    import.meta.env.VITE_SPOTIFY_PLAYLIST_URL ||
-    import.meta.env.VITE_SPOTIFY_EMBED_URL ||
-    '';
-
-  const spotifyEmbed = useMemo(
-    () => normalizeSpotifyEmbedSrc(fromEnvSpotify) || SPOTIFY_FALLBACK_EMBED,
-    [fromEnvSpotify]
-  );
-
-  const fromEnvYt = import.meta.env.VITE_YOUTUBE_FOCUS_URL || '';
-  const youtubeSrc = useMemo(
-    () => youtubeEmbedUrl(fromEnvYt) || YOUTUBE_DEFAULT,
-    [fromEnvYt]
-  );
-
-  const openInSpotifyHref = spotifyEmbed
-    .replace('open.spotify.com/embed/', 'open.spotify.com/')
-    .replace(/\?.*$/, '');
-
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
       <div>
         <h2 className="text-lg font-semibold tracking-wide text-emerald-300">Audio Core</h2>
         <p className="mt-1 text-xs text-slate-400">
-          Spotify’s embed often fails in dev (cookies, ad blockers, region). Use{' '}
-          <span className="text-emerald-400/90">Stream</span> for a player that usually works, or open Spotify in the app.
+          Select a curated spatial mix optimized for deep cognitive endurance and zero distraction. Links open externally to minimize main-thread rendering lag on the WebGL canvas.
         </p>
       </div>
 
-      <div className="flex shrink-0 gap-2">
-        <button
-          type="button"
-          onClick={() => setSource('youtube')}
-          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
-            source === 'youtube'
-              ? 'bg-emerald-500 text-slate-950'
-              : 'border border-white/15 bg-white/5 text-slate-300 hover:bg-white/10'
-          }`}
-        >
-          Stream (YouTube)
-        </button>
-        <button
-          type="button"
-          onClick={() => setSource('spotify')}
-          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
-            source === 'spotify'
-              ? 'bg-emerald-500 text-slate-950'
-              : 'border border-white/15 bg-white/5 text-slate-300 hover:bg-white/10'
-          }`}
-        >
-          Spotify embed
-        </button>
-        <a
-          href={openInSpotifyHref}
-          target="_blank"
-          rel="noreferrer"
-          className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/10"
-        >
-          Open in Spotify
-        </a>
-      </div>
-
-      <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-white/10 bg-slate-950/40 p-2 backdrop-blur-md">
-        {source === 'youtube' && (
-          <>
-            <iframe
-              title="Focus stream"
-              src={youtubeSrc}
-              width="100%"
-              height="100%"
-              className="aspect-video min-h-[220px] w-full rounded-xl border-0 sm:min-h-[280px]"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-            <p className="mt-2 text-center text-[11px] text-slate-500">
-              Set <code className="text-emerald-400/80">VITE_YOUTUBE_FOCUS_URL</code> to your own video or playlist link.
-            </p>
-          </>
-        )}
-
-        {source === 'spotify' && (
-          <>
-            <iframe
-              title="Spotify"
-              src={spotifyEmbed}
-              width="100%"
-              height="352"
-              className="w-full rounded-xl border-0"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
-            <p className="mt-2 text-center text-[11px] text-slate-500">
-              If you see “Page not found”, Spotify blocked the embed — use{' '}
-              <span className="text-slate-400">Stream</span> or{' '}
-              <span className="text-slate-400">Open in Spotify</span>.
-            </p>
-          </>
-        )}
+      <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+        <div className="grid grid-cols-1 gap-3">
+          {CURATED_TRACKS.map((track) => (
+            <div
+              key={track.id}
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-slate-900/50 backdrop-blur-md transition-all hover:border-emerald-500/30 hover:bg-slate-800/50"
+            >
+              <div className="relative aspect-video w-full overflow-hidden">
+                <img
+                  src={`https://img.youtube.com/vi/${track.id}/mqdefault.jpg`}
+                  alt={track.title}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+              </div>
+              
+              <div className="p-3">
+                <div className="mb-2">
+                  <span className="inline-block rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
+                    {track.category}
+                  </span>
+                </div>
+                <h3 className="mb-3 text-sm font-medium text-slate-100 line-clamp-2">
+                  {track.title}
+                </h3>
+                <a
+                  href={track.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-xs font-medium text-emerald-200 transition hover:bg-emerald-500/20 hover:border-emerald-500/60"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Launch Stream
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
