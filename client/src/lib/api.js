@@ -1,5 +1,5 @@
-/** Base path for API (Vite proxies /api → backend in dev). */
-export const API_BASE = '/api';
+/** Base path for API (Vite proxies /api → backend in dev, uses VITE_API_URL in production). */
+export const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export async function fetchJson(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
