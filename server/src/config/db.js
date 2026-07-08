@@ -1,14 +1,20 @@
 import mongoose from 'mongoose';
 
-const DEFAULT_URI = 'mongodb://localhost:27017/atlas_beast';
 const MAX_RETRIES = 10;
 const RETRY_MS = 3000;
 
 /**
- * Connects to MongoDB with exponential-style backoff retries.
- * Does not throw on failure after max retries — logs and allows process exit.
+ * Connects to MongoDB using MONGO_URI from the environment.
+ * Retries on failure; exits if MONGO_URI is missing or max retries are reached.
  */
-export async function connectDatabase(uri = process.env.MONGODB_URI || DEFAULT_URI) {
+export async function connectDatabase() {
+  const uri = process.env.MONGO_URI;
+
+  if (!uri) {
+    console.error('[ATLAS DB] MONGO_URI environment variable is not set.');
+    process.exit(1);
+  }
+
   let attempt = 0;
 
   while (attempt < MAX_RETRIES) {
