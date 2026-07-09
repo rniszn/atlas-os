@@ -8,12 +8,12 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Zustand](https://img.shields.io/badge/Zustand-Bear-brown?style=for-the-badge)
 
+### 🌐 [**Live Demo →**](https://atlas-os-client.vercel.app/)
+
 Project ATLAS is a decoupled full-stack (MERN) spatial operating system designed to eliminate context-switching and digital fatigue. It merges robust, database-driven task management with an immersive, WebGL-powered 3D canvas, rendering functional productivity tools as interactive spatial objects.
 
 ## 🚀 Engineering Highlights
-
 This project was architected with a focus on strict data integrity, hardware-accelerated rendering, and modular scalability:
-
 *   **Decoupled Full-Stack Architecture:** Engineered a stateless Node.js/Express backend with Mongoose ODM to serve RESTful endpoints, completely independent of the React frontend rendering pipeline.
 *   **High-Fidelity WebGL Performance:** Achieved a stable 60 FPS rendering loop by bridging React Three Fiber (`@react-three/fiber`) with selective 2D DOM re-rendering, avoiding costly layout reflows during heavy glassmorphic UI transitions.
 *   **Advanced Analytics (Chronos Engine):** Implemented the native HTML5 `Document.visibilityState` API to track tab foreground/background state with millisecond precision, generating highly accurate user Focus Scores persisted to MongoDB.
@@ -21,7 +21,6 @@ This project was architected with a focus on strict data integrity, hardware-acc
 *   **Asynchronous State Management:** Utilized Zustand for lightweight, boilerplate-free global state orchestration, seamlessly syncing MongoDB CRUD operations with 3D canvas raycasting events.
 
 ## 🧠 Core Modules
-
 *   **Command Desk:** A robust task management interface supporting full CRUD operations, instantly syncing local Zustand state with the MongoDB instance via asynchronous Express routes.
 *   **Chronos Tracker:** A time-tracking suite that logs actual "focused" vs "distracted" time, rendering historical session data programmatically via custom CSS/SVG charting.
 *   **Career Hub:** A dynamic internship application tracker. Users can create, update, and manage the status of job applications (Applied, Interviewing, Rejected) through dedicated REST endpoints.
@@ -29,7 +28,6 @@ This project was architected with a focus on strict data integrity, hardware-acc
 *   **Sonic Field (Audio Core):** A distraction-free, zero-lag UI overlay integrating static, curated YouTube VODs for deep focus, bypassing heavy iframe rendering on the main 3D canvas.
 
 ## 🛠️ Local Development Setup
-
 Ensure you have Node.js and a local MongoDB instance running on port `27017` before starting.
 
 **1. Clone the repository:**
